@@ -1,6 +1,6 @@
 al_Eu =  'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 al_Ru = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'
-sdvig = int(input('Шаг сдвига: '))
+sdvig = int(input('Шаг шифратора: '))
 message= input("Сообщение для дешифровки: ").upper()
 itog = ''
 language = input('Выберите язык Ru/Eu: ')
