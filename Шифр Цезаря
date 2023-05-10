@@ -1,0 +1,44 @@
+bot.message_handler(commands=['start'])
+def start(message):
+    lang = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    btn1 = types.KeyboardButton('Ru')
+    btn2 = types.KeyboardButton('Eu')
+    lang.add(btn1, btn2)
+    bot.send_message(message.chat.id, 'Я бот, который дешифрует шифр Цезаря' + '\nДля начала работы выбери язык', reply_markup = lang)
+
+def sdvig(message):
+    global sv
+    try:
+        sv = int(message.text)
+        sifr = bot.send_message(message.chat.id, 'Теперь укажите текст, который Вы хотите дешифровать')
+        bot.register_next_step_handler(sifr, result)
+    except Exception:
+        bot.send_message(message.chat.id, 'Укажите действительное число')
+        start(message)
+def result(message):
+    global sifr
+    sifr = message.text.lower()
+    itog = ''
+    for i in sifr:
+        if i in all_ru:
+            mesto = all_ru.find(i)
+            new_mesto = mesto - int(sv)
+            itog += all_ru[new_mesto]
+        elif i in all_Eu:
+            mesto = all_Eu.find(i)
+            new_mesto = mesto - int(sv)
+            itog += all_Eu[new_mesto]
+        else:
+            itog += i
+    bot.send_message(message.chat.id, itog)
+
+@bot.message_handler(content_types=['text'])
+def message(message):
+    if message.text == 'Ru':
+        sv = bot.send_message(message.chat.id, 'Вы выбрали русский язык. Укажите сдвиг, с помощью которого будет дешифроваться текст')
+        bot.register_next_step_handler(sv, sdvig)
+    if message.text == 'Eu':
+        sv = bot.send_message(message.chat.id, 'Вы выбрали английский язык. Укажите сдвиг, с помощью которого будет дешифроваться текст')
+        bot.register_next_step_handler(sv, sdvig)
+
+bot.polling(none_stop=True)
